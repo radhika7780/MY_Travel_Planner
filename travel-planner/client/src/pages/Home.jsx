@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import Navbar from '../components/Navbar';
 import SearchForm from '../components/SearchForm';
 import TripCard from '../components/TripCard';
-import { FaMapMarkedAlt, FaShieldAlt, FaHeadset } from 'react-icons/fa';
+import { FaMapMarkedAlt, FaShieldAlt, FaHeadset, FaInstagram, FaTwitter, FaFacebook } from 'react-icons/fa';
 
 const Home = () => {
     const handleSearch = (searchParams) => {
@@ -131,10 +131,17 @@ const Home = () => {
                         <div>
                             <h4 className="text-white text-lg font-bold mb-4">Follow Us</h4>
                             <div className="flex space-x-4">
-                                {/* Social Icons Mockup */}
-                                <div className="w-8 h-8 bg-gray-700 rounded-full hover:bg-primary cursor-pointer transition"></div>
-                                <div className="w-8 h-8 bg-gray-700 rounded-full hover:bg-primary cursor-pointer transition"></div>
-                                <div className="w-8 h-8 bg-gray-700 rounded-full hover:bg-primary cursor-pointer transition"></div>
+                                <div className="flex space-x-4">
+                                    <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-pink-600 text-white transition-colors duration-300">
+                                        <FaInstagram className="text-xl" />
+                                    </a>
+                                    <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-blue-400 text-white transition-colors duration-300">
+                                        <FaTwitter className="text-xl" />
+                                    </a>
+                                    <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-blue-600 text-white transition-colors duration-300">
+                                        <FaFacebook className="text-xl" />
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>

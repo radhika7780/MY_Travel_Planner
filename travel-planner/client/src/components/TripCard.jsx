@@ -1,10 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaBus, FaWifi, FaBolt, FaUtensils, FaStar, FaRupeeSign } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 
 const TripCard = ({ trip }) => {
     return (
-        <div className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group flex flex-col">
+        <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.95 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: false, amount: 0.3 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-shadow duration-300 border border-gray-100 overflow-hidden group flex flex-col"
+        >
             <div className="p-6 flex-1">
                 {/* Header */}
                 <div className="flex justify-between items-start mb-4">
@@ -64,7 +71,7 @@ const TripCard = ({ trip }) => {
                     View Seats
                 </Link>
             </div>
-        </div>
+        </motion.div>
     );
 };
 
