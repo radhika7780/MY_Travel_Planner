@@ -9,7 +9,9 @@ const BookingForm = ({ trip, onBook }) => {
     // Calculate details
     const basePrice = trip.price * seats;
     const foodPrice = food ? (250 * seats) : 0;
-    const discount = trip.offerPrice || 0;
+    // Calculate discount based on percentage if offerPrice is not available
+    const discount = trip.offerPrice ? (trip.offerPrice * seats) :
+        (trip.discountPercentage ? Math.round(basePrice * (trip.discountPercentage / 100)) : 0);
     const taxes = Math.round((basePrice + foodPrice) * 0.18); // 18% GST
     const finalAmount = basePrice + foodPrice + taxes - discount;
 
@@ -130,9 +132,6 @@ const BookingForm = ({ trip, onBook }) => {
                         <span>Total</span>
                         <span>₹{finalAmount}</span>
                     </div>
-                </div>
-                <div className="bg-red-500 text-white p-10">
-                    Tailwind Test
                 </div>
 
                 <button
