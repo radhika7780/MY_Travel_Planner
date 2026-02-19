@@ -131,6 +131,9 @@ const BookingForm = ({ trip, onBook }) => {
                         <span>₹{finalAmount}</span>
                     </div>
                 </div>
+                <div className="bg-red-500 text-white p-10">
+                    Tailwind Test
+                </div>
 
                 <button
                     type="submit"
