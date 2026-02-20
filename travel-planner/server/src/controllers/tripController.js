@@ -56,6 +56,15 @@ export const getTripById = async (req, res) => {
 // Controller for admin to create trips
 export const createTrip = async (req, res) => {
     try {
+        const { departureDateTime } = req.body;
+
+        // Validate departureDateTime
+        if (!departureDateTime || isNaN(new Date(departureDateTime).getTime())) {
+            return res.status(400).json({
+                message: 'Invalid departureDateTime format. Expected a valid ISO Date string.'
+            });
+        }
+
         const trip = await Trip.create(req.body);
         res.status(201).json(trip);
     } catch (error) {

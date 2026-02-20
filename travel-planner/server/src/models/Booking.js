@@ -20,15 +20,23 @@ const bookingSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'Please add total price']
     },
-    bookingStatus: {
+    status: {
         type: String,
-        enum: ['pending', 'confirmed', 'cancelled'],
-        default: 'confirmed'
+        enum: ['PENDING', 'CONFIRMED', 'CANCELLED'],
+        default: 'PENDING'
     },
     paymentStatus: {
         type: String,
         enum: ['pending', 'paid', 'failed'],
         default: 'pending'
+    },
+    reminder2hrSent: {
+        type: Boolean,
+        default: false
+    },
+    reminder30minSent: {
+        type: Boolean,
+        default: false
     },
     createdAt: {
         type: Date,

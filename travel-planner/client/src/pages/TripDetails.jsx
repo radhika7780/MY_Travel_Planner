@@ -36,8 +36,7 @@ const TripDetails = () => {
     const handleBook = async (bookingData) => {
         setIsBooking(true);
         try {
-            // Mock userId for now
-            const userId = 'user_123';
+            const userId = 'user_123'; // Replace later with real user from auth
 
             const bookingPayload = {
                 userId,
@@ -48,14 +47,26 @@ const TripDetails = () => {
 
             const newBooking = await createBooking(bookingPayload);
 
-            navigate('/payment', { state: { trip, booking: newBooking, msg: 'Booking Initiated' } });
+            // ✅ FIXED: Pass bookingData correctly
+            navigate('/payment', {
+                state: {
+                    trip,
+                    bookingData: {
+                        ...bookingData,
+                        bookingId: newBooking._id
+                    }
+                }
+            });
+
         } catch (err) {
-            console.error(err);
             alert('Failed to initiate booking. Please try again.');
         } finally {
             setIsBooking(false);
         }
     };
+
+
+
 
     if (loading) {
         return (

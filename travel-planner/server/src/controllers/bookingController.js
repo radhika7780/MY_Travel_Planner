@@ -34,7 +34,7 @@ export const createBooking = async (req, res) => {
             trip: tripId,
             numberOfSeats,
             totalPrice,
-            bookingStatus: 'confirmed',
+            status: 'PENDING',
             paymentStatus: 'pending'
         });
 
@@ -78,7 +78,7 @@ export const getBookingsByUserId = async (req, res) => {
             userId: b.user,
             numberOfSeats: b.numberOfSeats,
             totalPrice: b.totalPrice,
-            bookingStatus: b.bookingStatus,
+            status: b.status,
             paymentStatus: b.paymentStatus,
             createdAt: b.createdAt,
             tripDetails: b.trip ? {

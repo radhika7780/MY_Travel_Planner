@@ -15,6 +15,10 @@ const tripSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please add departure time']
     },
+    departureDateTime: {
+        type: Date,
+        required: [true, 'Please add departure date and time for scheduling']
+    },
     arrivalTime: {
         type: String,
         required: [true, 'Please add arrival time']
