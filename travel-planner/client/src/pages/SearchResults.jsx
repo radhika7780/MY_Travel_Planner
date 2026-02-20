@@ -26,6 +26,8 @@ const SearchResults = () => {
                 // Fetch trips based on search params
                 const data = await fetchTrips({ from, to, date });
                 setTrips(data);
+                console.log("Trips from API:", data);
+
             } catch (err) {
                 setError('Failed to fetch trips. Please try again later.');
             } finally {
@@ -84,7 +86,8 @@ const SearchResults = () => {
                             </div>
                         ) : (
                             trips.map(trip => (
-                                <TripCard key={trip.id} trip={trip} />
+                                <TripCard key={trip._id} trip={trip} />
+
                             ))
                         )}
                     </div>

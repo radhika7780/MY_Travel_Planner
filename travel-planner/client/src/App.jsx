@@ -8,6 +8,7 @@ import TicketConfirmation from './pages/TicketConfirmation';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import MyBookings from './pages/MyBookings';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -15,9 +16,30 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/search" element={<SearchResults />} />
       <Route path="/trip/:id" element={<TripDetails />} />
-      <Route path="/payment" element={<PaymentPage />} />
-      <Route path="/confirmation" element={<TicketConfirmation />} />
-      <Route path="/my-bookings" element={<MyBookings />} />
+      <Route
+        path="/payment"
+        element={
+          <ProtectedRoute>
+            <PaymentPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/confirmation"
+        element={
+          <ProtectedRoute>
+            <TicketConfirmation />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/my-bookings"
+        element={
+          <ProtectedRoute>
+            <MyBookings />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
     </Routes>

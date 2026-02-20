@@ -1,80 +1,113 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
-import { FaUnlockAlt, FaEnvelope, FaGoogle, FaFacebook } from 'react-icons/fa';
+import { FaEnvelope, FaLock, FaArrowRight } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 
 const Login = () => {
-    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const { login } = useAuth();
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Mock login
-        localStorage.setItem('token', 'mock-token');
-        navigate('/');
+        setError('');
+        setIsSubmitting(true);
+        try {
+            await login({ email, password });
+            navigate('/');
+        } catch (err) {
+            setError(err.message || 'Login failed. Please check your credentials.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
         <div className="bg-background min-h-screen flex flex-col">
             <Navbar />
-            <div className="flex-1 flex items-center justify-center px-4 py-12">
-                <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-gray-100">
-                    <h1 className="text-2xl font-bold mb-2 text-center text-gray-800">Welcome Back</h1>
-                    <p className="text-center text-gray-500 mb-8">Login to manage your bookings</p>
+            <div className="flex-1 flex items-center justify-center p-4 py-20">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 border border-gray-100"
+                >
+                    <div className="text-center mb-8">
+                        <h2 className="text-3xl font-bold text-gray-900">Welcome Back</h2>
+                        <p className="text-gray-500 mt-2">Sign in to manage your bookings</p>
+                    </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="relative">
-                            <FaEnvelope className="absolute top-3.5 left-3 text-gray-400" />
-                            <input
-                                type="email"
-                                placeholder="Email Address"
-                                className="w-full pl-10 pr-4 py-3 border rounded-lg outline-none focus:ring-2 ring-primary transition bg-gray-50 focus:bg-white"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
+                    {error && (
+                        <div className="bg-red-50 text-red-600 p-4 rounded-xl mb-6 text-sm font-medium border border-red-100">
+                            {error}
                         </div>
-                        <div className="relative">
-                            <FaUnlockAlt className="absolute top-3.5 left-3 text-gray-400" />
-                            <input
-                                type="password"
-                                placeholder="Password"
-                                className="w-full pl-10 pr-4 py-3 border rounded-lg outline-none focus:ring-2 ring-primary transition bg-gray-50 focus:bg-white"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
+                    )}
+
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                        <div className="space-y-1">
+                            <label className="text-sm font-semibold text-gray-700 ml-1">Email Address</label>
+                            <div className="relative group">
+                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none group-focus-within:text-primary transition-colors text-gray-400">
+                                    <FaEnvelope />
+                                </div>
+                                <input
+                                    type="email"
+                                    required
+                                    className="block w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-gray-900 placeholder-gray-400"
+                                    placeholder="your@email.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                            </div>
                         </div>
 
-                        <div className="flex justify-end">
-                            <a href="#" className="text-sm text-primary font-semibold hover:underline">Forgot Password?</a>
+                        <div className="space-y-1">
+                            <label className="text-sm font-semibold text-gray-700 ml-1">Password</label>
+                            <div className="relative group">
+                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none group-focus-within:text-primary transition-colors text-gray-400">
+                                    <FaLock />
+                                </div>
+                                <input
+                                    type="password"
+                                    required
+                                    className="block w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-gray-900 placeholder-gray-400"
+                                    placeholder="••••••••"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                            </div>
                         </div>
 
-                        <button type="submit" className="w-full bg-primary text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition shadow-lg">
-                            Login
+                        <div className="flex items-center justify-between text-sm py-1">
+                            <label className="flex items-center gap-2 cursor-pointer text-gray-600">
+                                <input type="checkbox" className="rounded-md border-gray-300 text-primary focus:ring-primary" />
+                                Remember me
+                            </label>
+                            <a href="#" className="text-primary font-semibold hover:underline">Forgot password?</a>
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="w-full bg-primary text-white font-bold py-4 rounded-2xl hover:bg-blue-700 transition shadow-lg shadow-primary/20 flex items-center justify-center gap-3 disabled:opacity-70 group"
+                        >
+                            {isSubmitting ? 'Signing in...' : 'Sign In'}
+                            {!isSubmitting && <FaArrowRight className="group-hover:translate-x-1 transition-transform" />}
                         </button>
                     </form>
 
-                    <div className="my-6 flex items-center gap-4">
-                        <div className="h-px bg-gray-200 flex-1"></div>
-                        <span className="text-xs text-gray-400 font-semibold">OR CONTINUE WITH</span>
-                        <div className="h-px bg-gray-200 flex-1"></div>
+                    <div className="mt-8 pt-8 border-t border-gray-100 text-center">
+                        <p className="text-gray-600">
+                            Don't have an account?{' '}
+                            <Link to="/register" className="text-primary font-bold hover:underline">Create Account</Link>
+                        </p>
                     </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                        <button className="flex items-center justify-center gap-2 border py-2.5 rounded-lg hover:bg-gray-50 transition">
-                            <FaGoogle className="text-red-500" /> Google
-                        </button>
-                        <button className="flex items-center justify-center gap-2 border py-2.5 rounded-lg hover:bg-gray-50 transition">
-                            <FaFacebook className="text-blue-600" /> Facebook
-                        </button>
-                    </div>
-
-                    <p className="text-center mt-8 text-sm text-gray-600">
-                        Don't have an account? <Link to="/register" className="text-primary font-bold hover:underline">Register</Link>
-                    </p>
-                </div>
+                </motion.div>
             </div>
         </div>
     );

@@ -1,33 +1,49 @@
-import React, { createContext, useState, useEffect } from 'react';
-import api from '../services/api';
+import React, { createContext, useState, useEffect, useContext } from 'react';
+import { getProfile, login as apiLogin, register as apiRegister } from '../services/api';
 
 export const AuthContext = createContext();
+
+export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchUser = async () => {
+        const checkAuth = async () => {
             const token = localStorage.getItem('token');
             if (token) {
                 try {
-                    const res = await api.get('/auth/profile');
-                    setUser(res.data);
+                    const userData = await getProfile();
+                    setUser(userData);
                 } catch (error) {
-                    console.error('Error fetching user', error);
+                    console.error('Failed to authenticate with token', error);
                     localStorage.removeItem('token');
                 }
             }
             setLoading(false);
         };
-        fetchUser();
+        checkAuth();
     }, []);
 
-    const login = async (email, password) => {
-        const res = await api.post('/auth/login', { email, password });
-        localStorage.setItem('token', res.data.token);
-        setUser(res.data.user);
+    const login = async (credentials) => {
+        try {
+            const data = await apiLogin(credentials);
+            localStorage.setItem('token', data.token);
+            setUser(data.user);
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    const register = async (userData) => {
+        try {
+            const data = await apiRegister(userData);
+            return data;
+        } catch (error) {
+            throw error;
+        }
     };
 
     const logout = () => {
@@ -36,7 +52,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, loading }}>
+        <AuthContext.Provider value={{ user, login, register, logout, loading, isAuthenticated: !!user }}>
             {children}
         </AuthContext.Provider>
     );
