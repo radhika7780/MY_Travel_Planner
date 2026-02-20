@@ -26,11 +26,6 @@ export const createBooking = async (req, res) => {
         );
 
         if (!trip) {
-            // Check if trip exists at all to provide better error message
-            const tripExists = await Trip.findById(tripId);
-            if (!tripExists) {
-                return res.status(404).json({ message: 'Trip not found' });
-            }
             return res.status(400).json({ message: 'Not enough seats available' });
         }
 

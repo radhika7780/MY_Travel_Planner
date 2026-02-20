@@ -4,8 +4,6 @@ import { FaBus, FaWifi, FaBolt, FaUtensils, FaStar, FaRupeeSign } from 'react-ic
 import { motion } from 'framer-motion';
 
 const TripCard = ({ trip }) => {
-    console.log("TripCard trip object:", trip);
-
     return (
         <motion.div
             initial={{ opacity: 0, y: 50, scale: 0.95 }}
@@ -68,12 +66,9 @@ const TripCard = ({ trip }) => {
                 </div>
                 <Link
                     to={`/trip/${trip._id}`}
-
-
                     className="bg-primary text-white font-bold py-2.5 px-6 rounded-lg hover:bg-blue-700 transition shadow-md transform hover:-translate-y-0.5"
                 >
-                    VIEW SEATS UPDATED
-
+                    View Seats
                 </Link>
             </div>
         </motion.div>

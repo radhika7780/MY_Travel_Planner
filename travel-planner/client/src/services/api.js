@@ -76,10 +76,7 @@ export const fetchTrips = async (params = {}) => {
 
 export const fetchTripById = async (id) => {
     try {
-        const url = `/trips/${id}`;
-        console.log(`API calling fetchTripById. ID: ${id}, Relative URL: ${url}, BaseURL: ${api.defaults.baseURL}`);
-        const response = await api.get(url);
-        console.log(`API fetchTripById Success:`, response.status, response.data);
+        const response = await api.get(`/trips/${id}`);
         return response.data;
     } catch (error) {
         console.error(`API Error in fetchTripById. ID ${id}:`, error.response?.status, error.response?.data || error.message);

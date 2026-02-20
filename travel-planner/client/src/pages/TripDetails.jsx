@@ -7,8 +7,6 @@ import { fetchTripById, createBooking } from '../services/api';
 
 const TripDetails = () => {
     const { id } = useParams();
-
-    console.log('TripDetails rendered with param id:', id);
     const navigate = useNavigate();
 
     const [trip, setTrip] = useState(null);
@@ -18,11 +16,9 @@ const TripDetails = () => {
 
     useEffect(() => {
         const loadTrip = async () => {
-            console.log('Fetching details for trip ID:', id);
             setLoading(true);
             try {
                 const data = await fetchTripById(id);
-                console.log('Successfully fetched trip data:', data);
                 setTrip(data);
             } catch (err) {
                 console.error('Error fetching trip details:', err);
