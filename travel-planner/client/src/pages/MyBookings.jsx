@@ -1,32 +1,49 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import { FaBus, FaCalendarAlt, FaClock, FaTicketAlt } from 'react-icons/fa';
-import { fetchUserBookings } from '../services/api';
+import { fetchUserBookings, cancelBooking } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
 
 const MyBookings = () => {
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [cancellingId, setCancellingId] = useState(null);
     const [error, setError] = useState(null);
     const { user } = useAuth();
 
+    const loadBookings = async () => {
+        try {
+            setLoading(true);
+            const queryId = user?._id || user?.id || '507f1f77bcf86cd799439011';
+            const data = await fetchUserBookings(queryId);
+            setBookings(data);
+        } catch (err) {
+            setError('Failed to load your bookings. Please try again later.');
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const loadBookings = async () => {
-            if (!user) return;
-            try {
-                setLoading(true);
-                const data = await fetchUserBookings(user.id);
-                setBookings(data);
-            } catch (err) {
-                setError('Failed to load your bookings. Please try again later.');
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        };
         loadBookings();
     }, [user]);
+
+    const handleCancel = async (bookingId) => {
+        if (!window.confirm('Are you sure you want to cancel this booking?')) return;
+
+        try {
+            setCancellingId(bookingId);
+            await cancelBooking(bookingId);
+            alert('Booking cancelled successfully!');
+            loadBookings();
+        } catch (err) {
+            alert(`Cancel failed: ${err.message || 'Unknown error'}`);
+        } finally {
+            setCancellingId(null);
+        }
+    };
 
     if (loading) {
         return (
@@ -99,9 +116,9 @@ const MyBookings = () => {
                                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                                         <div className="flex-1">
                                             <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
-                                                {booking.tripDetails?.from || 'Origin'}
+                                                {booking.tripDetails?.from || 'Loading...'}
                                                 <span className="text-primary/30">→</span>
-                                                {booking.tripDetails?.to || 'Destination'}
+                                                {booking.tripDetails?.to || 'Loading...'}
                                             </h3>
                                             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                                                 <div className="space-y-1">
@@ -118,7 +135,14 @@ const MyBookings = () => {
                                                 </div>
                                                 <div className="space-y-1">
                                                     <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Vehicle</p>
-                                                    <p className="font-bold text-gray-800 truncate">{booking.tripDetails?.vehicleType || 'Bus'}</p>
+                                                    <div className="flex flex-col">
+                                                        <p className="font-bold text-gray-800 truncate">{booking.tripDetails?.vehicleType || 'Bus'}</p>
+                                                        {booking.tripDetails?.ac && (
+                                                            <span className="text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded font-bold w-fit mt-1">
+                                                                AC SYSTEM ACTIVE
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -129,8 +153,12 @@ const MyBookings = () => {
                                                 <button className="flex-1 bg-primary text-white text-sm font-bold py-2.5 px-6 rounded-xl hover:bg-blue-700 transition shadow-lg shadow-primary/20">
                                                     View Ticket
                                                 </button>
-                                                <button className="flex-1 border border-red-100 text-red-500 text-sm font-bold py-2.5 px-6 rounded-xl hover:bg-red-50 transition">
-                                                    Cancel
+                                                <button
+                                                    onClick={() => handleCancel(booking._id)}
+                                                    disabled={cancellingId === booking._id}
+                                                    className="flex-1 border border-red-100 text-red-500 text-sm font-bold py-2.5 px-6 rounded-xl hover:bg-red-50 transition disabled:opacity-50"
+                                                >
+                                                    {cancellingId === booking._id ? 'Cancelling...' : 'Cancel'}
                                                 </button>
                                             </div>
                                         </div>

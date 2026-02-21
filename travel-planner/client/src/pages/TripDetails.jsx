@@ -5,10 +5,12 @@ import BookingForm from '../components/BookingForm';
 import Footer from '../components/Footer';
 import { FaBus, FaWifi, FaPlug, FaUtensils, FaClock, FaStar, FaMapMarkerAlt } from 'react-icons/fa';
 import { fetchTripById, createBooking } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 const TripDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { user } = useAuth();
 
     const [trip, setTrip] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -37,7 +39,7 @@ const TripDetails = () => {
     const handleBook = async (bookingData) => {
         setIsBooking(true);
         try {
-            const userId = 'user_123'; // Replace later with real user from auth
+            const userId = user?._id || user?.id || '507f1f77bcf86cd799439011';
 
             const bookingPayload = {
                 userId,
@@ -53,13 +55,14 @@ const TripDetails = () => {
                     trip,
                     bookingData: {
                         ...bookingData,
-                        bookingId: newBooking._id
+                        bookingId: newBooking.booking._id
                     }
                 }
             });
 
         } catch (err) {
-            alert('Failed to initiate booking. Please try again.');
+            console.error('Booking Error Details:', err);
+            alert(`Failed to initiate booking: ${err.message || 'Unknown error'}`);
         } finally {
             setIsBooking(false);
         }

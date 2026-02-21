@@ -15,7 +15,7 @@ const Home = () => {
     useEffect(() => {
         const loadPopularTrips = async () => {
             try {
-                const data = await fetchTrips();
+                const data = await fetchTrips({ isPopular: true });
                 setPopularTrips(data.slice(0, 6));
             } catch (error) {
                 console.error('Failed to load popular trips:', error);

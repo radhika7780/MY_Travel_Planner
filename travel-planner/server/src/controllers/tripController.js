@@ -15,6 +15,10 @@ export const getTrips = async (req, res) => {
             query.to = { $regex: new RegExp(to.trim(), 'i') };
         }
 
+        if (req.query.isPopular === 'true') {
+            query.isPopular = true;
+        }
+
         // Note: Date filtering can be added here if dates are stored in the model
         // For now, we perform route-based search as per user dummy data structure
 

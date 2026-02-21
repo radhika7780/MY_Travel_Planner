@@ -100,6 +100,15 @@ export const fetchUserBookings = async (userId) => {
     }
 };
 
+export const cancelBooking = async (id) => {
+    try {
+        const response = await api.put(`/bookings/${id}/cancel`);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data || { message: 'Network Error' };
+    }
+};
+
 // 4. Payment Functions
 export const initiatePayment = async (amount) => {
     try {
