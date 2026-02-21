@@ -59,6 +59,10 @@ const tripSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    isPopular: {
+        type: Boolean,
+        default: false
+    },
     createdAt: {
         type: Date,
         default: Date.now
