@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import BookingForm from '../components/BookingForm';
+import Footer from '../components/Footer';
 import { FaBus, FaWifi, FaPlug, FaUtensils, FaClock, FaStar, FaMapMarkerAlt } from 'react-icons/fa';
 import { fetchTripById, createBooking } from '../services/api';
 
@@ -47,7 +48,6 @@ const TripDetails = () => {
 
             const newBooking = await createBooking(bookingPayload);
 
-            // ✅ FIXED: Pass bookingData correctly
             navigate('/payment', {
                 state: {
                     trip,
@@ -65,36 +65,35 @@ const TripDetails = () => {
         }
     };
 
-
-
-
     if (loading) {
         return (
-            <div className="bg-background min-h-screen pb-12">
+            <div className="bg-background min-h-screen flex flex-col">
                 <Navbar />
-                <div className="container mx-auto px-4 py-20 text-center">
+                <div className="container mx-auto px-4 py-20 text-center flex-1">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
                     <p className="text-gray-500">Loading trip details...</p>
                 </div>
+                <Footer />
             </div>
         );
     }
 
     if (error || !trip) {
         return (
-            <div className="bg-background min-h-screen pb-12">
+            <div className="bg-background min-h-screen flex flex-col">
                 <Navbar />
-                <div className="container mx-auto px-4 py-20 text-center">
+                <div className="container mx-auto px-4 py-20 text-center flex-1">
                     <div className="bg-red-50 text-red-600 p-4 rounded-lg inline-block">
                         {error || 'Trip not found'}
                     </div>
                 </div>
+                <Footer />
             </div>
         );
     }
 
     return (
-        <div className="bg-background min-h-screen pb-12">
+        <div className="bg-background min-h-screen flex flex-col">
             <Navbar />
 
             {/* Header / Breadcrumb */}
@@ -116,7 +115,7 @@ const TripDetails = () => {
                 </div>
             </div>
 
-            <div className="container mx-auto px-4 -mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="container mx-auto px-4 -mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8 pb-12 flex-1">
                 {/* Left Column: Trip Info */}
                 <div className="lg:col-span-2 space-y-6">
                     {/* Timing Card */}
@@ -154,7 +153,6 @@ const TripDetails = () => {
                     <div className="bg-white rounded-xl shadow-md p-6">
                         <h3 className="text-xl font-bold mb-4 text-gray-800">Amenities</h3>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            {/* Static amenities for now, or map from trip.specialFacilities if available */}
                             {trip.specialFacilities && trip.specialFacilities.length > 0 ? (
                                 trip.specialFacilities.map((facility, index) => (
                                     <div key={index} className="flex items-center gap-3 text-gray-600 bg-gray-50 p-3 rounded-lg">
@@ -168,7 +166,7 @@ const TripDetails = () => {
                         </div>
                     </div>
 
-                    {/* Vehicle Images (Placeholder) */}
+                    {/* Vehicle Photos */}
                     <div className="bg-white rounded-xl shadow-md p-6">
                         <h3 className="text-xl font-bold mb-4 text-gray-800">Vehicle Photos</h3>
                         <div className="grid grid-cols-3 gap-4">
@@ -186,6 +184,8 @@ const TripDetails = () => {
                     </div>
                 </div>
             </div>
+
+            <Footer />
         </div>
     );
 };

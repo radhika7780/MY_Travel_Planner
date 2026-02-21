@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 import { FaCheckCircle, FaDownload, FaQrcode } from 'react-icons/fa';
 
 const TicketConfirmation = () => {
@@ -11,10 +12,10 @@ const TicketConfirmation = () => {
     const bookingId = "TRV-" + Math.floor(100000 + Math.random() * 900000);
 
     return (
-        <div className="bg-background min-h-screen">
+        <div className="bg-background min-h-screen flex flex-col">
             <Navbar />
-            <div className="container mx-auto px-4 py-12 flex justify-center">
-                <div className="bg-white rounded-2xl shadow-xl overflow-hidden max-w-2xl w-full">
+            <div className="container mx-auto px-4 py-12 flex justify-center flex-1">
+                <div className="bg-white rounded-2xl shadow-xl overflow-hidden max-w-2xl w-full h-fit">
                     <div className="bg-green-500 text-white p-8 text-center">
                         <FaCheckCircle className="text-6xl mx-auto mb-4" />
                         <h1 className="text-3xl font-bold">Booking Confirmed!</h1>
@@ -35,13 +36,13 @@ const TicketConfirmation = () => {
                         <div className="border-t border-b py-6 mb-6 grid grid-cols-2 gap-6">
                             <div>
                                 <p className="text-sm text-gray-500">Trip</p>
-                                <p className="font-bold text-gray-800">{trip.name}</p>
+                                <p className="font-bold text-gray-800">{trip.from} → {trip.to}</p>
                                 <p className="text-xs text-gray-500">{trip.vehicleType}</p>
                             </div>
                             <div>
                                 <p className="text-sm text-gray-500">Departure</p>
-                                <p className="font-bold text-gray-800">{trip.departure}</p>
-                                <p className="text-xs text-gray-500">Hyderabad</p>
+                                <p className="font-bold text-gray-800">{trip.departureTime || '22:00'}</p>
+                                <p className="text-xs text-gray-500">{trip.from}</p>
                             </div>
                             <div>
                                 <p className="text-sm text-gray-500">Passenger</p>
@@ -65,6 +66,7 @@ const TicketConfirmation = () => {
                     </div>
                 </div>
             </div>
+            <Footer />
         </div>
     );
 };

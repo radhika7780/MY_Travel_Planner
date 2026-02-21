@@ -9,103 +9,110 @@ const SearchForm = ({ onSearch }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSearch({ from, to, date, travelers });
+        if (!onSearch) return;
+        onSearch({ from: from.trim(), to: to.trim(), date, travelers });
+    };
+
+    const handleSwap = () => {
+        setFrom(to);
+        setTo(from);
     };
 
     return (
         <form
             onSubmit={handleSubmit}
-            className="bg-white shadow-2xl rounded-2xl p-8 -mt-10 flex flex-col lg:flex-row gap-6 items-center relative z-20"
+            className="bg-white shadow-[0_20px_50px_rgba(8,112,184,0.15)] rounded-[2rem] p-4 lg:p-2 -mt-16 flex flex-col lg:flex-row items-stretch lg:items-center relative z-20 border border-white/50 backdrop-blur-sm"
         >
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 w-full items-center">
+            <div className="flex-1 grid grid-cols-1 md:grid-cols-11 items-center">
 
                 {/* From Field */}
-                <div className="md:col-span-3 w-full border-b md:border-b-0 md:border-r border-gray-100 pb-4 md:pb-0 md:pr-4">
-                    <label className="block text-gray-500 text-xs font-bold uppercase tracking-wider mb-2 ml-1">From</label>
-                    <div className="flex items-center px-2 py-2 bg-white transition-all cursor-text group">
-                        <FaMapMarkerAlt className="text-gray-400 group-focus-within:text-primary transition text-xl" />
-                        <div className="ml-4 flex-1">
-                            <input
-                                type="text"
-                                placeholder="Enter Source"
-                                className="w-full bg-transparent focus:outline-none text-gray-800 font-bold text-lg placeholder-gray-300"
-                                value={from}
-                                onChange={(e) => setFrom(e.target.value)}
-                                required
-                            />
+                <div className="md:col-span-3 p-4 border-b md:border-b-0 md:border-r border-gray-100 group transition-all">
+                    <label className="block text-[10px] font-black uppercase tracking-[0.1em] text-blue-400 mb-1 ml-9">From</label>
+                    <div className="flex items-center gap-3 px-2">
+                        <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+                            <FaMapMarkerAlt className="text-sm" />
                         </div>
+                        <input
+                            type="text"
+                            placeholder="Enter Source"
+                            className="bg-transparent focus:outline-none text-gray-800 font-bold text-lg placeholder-gray-300 w-full"
+                            value={from}
+                            onChange={(e) => setFrom(e.target.value)}
+                            required
+                        />
                     </div>
                 </div>
 
-                {/* Swap Icon */}
-                <div className="hidden md:flex justify-center -mx-4 z-10">
-                    <button type="button" className="bg-blue-50 text-blue-500 p-2 rounded-full hover:bg-blue-100 transition transform hover:rotate-180">
-                        <FaExchangeAlt />
+                {/* Swap Component */}
+                <div className="absolute left-[26%] top-1/2 -translate-y-1/2 z-30 hidden md:block">
+                    <button
+                        type="button"
+                        onClick={handleSwap}
+                        className="bg-white border border-gray-100 p-2.5 rounded-full shadow-lg hover:shadow-xl hover:scale-110 active:scale-95 transition-all text-blue-500 hover:text-blue-600 group"
+                    >
+                        <FaExchangeAlt className="group-hover:rotate-180 transition-transform duration-500" />
                     </button>
                 </div>
 
                 {/* To Field */}
-                <div className="md:col-span-3 w-full border-b md:border-b-0 md:border-r border-gray-100 pb-4 md:pb-0 md:pr-4">
-                    <label className="block text-gray-500 text-xs font-bold uppercase tracking-wider mb-2 ml-1">To</label>
-                    <div className="flex items-center px-2 py-2 bg-white transition-all cursor-text group">
-                        <FaMapMarkerAlt className="text-gray-400 group-focus-within:text-primary transition text-xl" />
-                        <div className="ml-4 flex-1">
-                            <input
-                                type="text"
-                                placeholder="Enter Destination"
-                                className="w-full bg-transparent focus:outline-none text-gray-800 font-bold text-lg placeholder-gray-300"
-                                value={to}
-                                onChange={(e) => setTo(e.target.value)}
-                                required
-                            />
+                <div className="md:col-span-3 p-4 border-b md:border-b-0 md:border-r border-gray-100 pl-4 md:pl-8 group transition-all">
+                    <label className="block text-[10px] font-black uppercase tracking-[0.1em] text-blue-400 mb-1 ml-9">To</label>
+                    <div className="flex items-center gap-3 px-2">
+                        <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+                            <FaMapMarkerAlt className="text-sm" />
                         </div>
+                        <input
+                            type="text"
+                            placeholder="Enter Destination"
+                            className="bg-transparent focus:outline-none text-gray-800 font-bold text-lg placeholder-gray-300 w-full"
+                            value={to}
+                            onChange={(e) => setTo(e.target.value)}
+                            required
+                        />
                     </div>
                 </div>
 
                 {/* Date Field */}
-                <div className="md:col-span-3 w-full border-b md:border-b-0 md:border-r border-gray-100 pb-4 md:pb-0 md:pr-4">
-                    <label className="block text-gray-500 text-xs font-bold uppercase tracking-wider mb-2 ml-1">Date</label>
-                    <div className="flex items-center px-2 py-2 bg-white transition-all cursor-pointer group">
-                        <FaCalendarAlt className="text-gray-400 group-focus-within:text-primary transition text-xl" />
-                        <div className="ml-4 flex-1">
-                            <input
-                                type="date"
-                                className="w-full bg-transparent focus:outline-none text-gray-800 font-bold text-lg cursor-pointer placeholder-gray-300"
-                                value={date}
-                                onChange={(e) => setDate(e.target.value)}
-                                required
-                            />
+                <div className="md:col-span-3 p-4 border-b md:border-b-0 md:border-r border-gray-100 group transition-all">
+                    <label className="block text-[10px] font-black uppercase tracking-[0.1em] text-blue-400 mb-1 ml-9">Date</label>
+                    <div className="flex items-center gap-3 px-2">
+                        <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+                            <FaCalendarAlt className="text-sm" />
                         </div>
+                        <input
+                            type="date"
+                            className="bg-transparent focus:outline-none text-gray-800 font-bold text-lg w-full cursor-pointer"
+                            value={date}
+                            onChange={(e) => setDate(e.target.value)}
+                            required
+                        />
                     </div>
                 </div>
 
                 {/* Travelers Field */}
-                <div className="md:col-span-2 w-full">
-                    <label className="block text-gray-500 text-xs font-bold uppercase tracking-wider mb-2 ml-1">Travelers</label>
-                    <div className="flex items-center px-2 py-2 bg-white transition-all cursor-pointer group">
-                        <FaUserFriends className="text-gray-400 group-focus-within:text-primary transition text-xl" />
-                        <div className="ml-4 flex-1">
-                            <input
-                                type="number"
-                                min="1"
-                                className="w-full bg-transparent focus:outline-none text-gray-800 font-bold text-lg"
-                                value={travelers}
-                                onChange={(e) => setTravelers(e.target.value)}
-                            />
+                <div className="md:col-span-2 p-4 group transition-all">
+                    <label className="block text-[10px] font-black uppercase tracking-[0.1em] text-blue-400 mb-1 ml-9">Travelers</label>
+                    <div className="flex items-center gap-3 px-2 text-gray-800 font-bold text-lg">
+                        <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+                            <FaUserFriends className="text-sm" />
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <button type="button" onClick={() => setTravelers(Math.max(1, travelers - 1))} className="hover:text-blue-500">-</button>
+                            <span className="w-4 text-center">{travelers}</span>
+                            <button type="button" onClick={() => setTravelers(travelers + 1)} className="hover:text-blue-500">+</button>
                         </div>
                     </div>
                 </div>
-
             </div>
 
-            {/* Search Button */}
-            <div className="w-full lg:w-auto mt-6 lg:mt-0 lg:ml-4">
+            {/* Premium Pill Button */}
+            <div className="p-2">
                 <button
                     type="submit"
-                    className="w-full bg-danger text-white font-bold text-xl py-5 px-10 rounded-xl hover:bg-red-600 transition shadow-xl transform hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-3"
+                    className="w-full lg:w-[180px] h-[64px] rounded-full font-black uppercase tracking-widest text-sm bg-gradient-to-r from-red-500 to-rose-600 shadow-lg hover:shadow-red-200 transition-all duration-300 flex items-center justify-center gap-3 text-white group"
                 >
-                    <FaSearch />
-                    Search
+                    <FaSearch className="group-hover:scale-110 transition-transform duration-300" />
+                    <span>Search</span>
                 </button>
             </div>
         </form>

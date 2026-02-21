@@ -16,7 +16,9 @@ const TripCard = ({ trip }) => {
                 {/* Header */}
                 <div className="flex justify-between items-start mb-4">
                     <div>
-                        <h3 className="text-xl font-bold text-gray-800 group-hover:text-primary transition line-clamp-1">{trip.name}</h3>
+                        <h3 className="text-xl font-bold text-gray-800 group-hover:text-primary transition line-clamp-1">
+                            {trip.from} → {trip.to}
+                        </h3>
                         <div className="flex items-center text-gray-500 text-sm mt-1 gap-2">
                             <span className="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-xs font-semibold">{trip.vehicleType || 'AC Sleeper'}</span>
                             <span className="flex items-center gap-1 text-orange-500 font-bold text-xs"><FaStar /> {trip.rating || 4.5}</span>
@@ -32,7 +34,7 @@ const TripCard = ({ trip }) => {
                 {/* Timeline */}
                 <div className="flex items-center justify-between text-gray-700 mb-6">
                     <div className="text-center">
-                        <p className="text-xl font-bold">22:00</p>
+                        <p className="text-xl font-bold">{trip.departureTime || '22:00'}</p>
                         <p className="text-xs text-gray-400 font-medium">Departure</p>
                     </div>
                     <div className="flex-1 px-4 flex flex-col items-center">
@@ -43,7 +45,7 @@ const TripCard = ({ trip }) => {
                         </div>
                     </div>
                     <div className="text-center">
-                        <p className="text-xl font-bold">10:30</p>
+                        <p className="text-xl font-bold">{trip.arrivalTime || '10:30'}</p>
                         <p className="text-xs text-gray-400 font-medium">Arrival</p>
                     </div>
                 </div>

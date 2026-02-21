@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Filters from '../components/Filters';
 import TripCard from '../components/TripCard';
+import Footer from '../components/Footer';
 import { fetchTrips } from '../services/api';
 
 const SearchResults = () => {
@@ -37,7 +38,7 @@ const SearchResults = () => {
     }, [from, to, date]);
 
     return (
-        <div className="bg-background min-h-screen">
+        <div className="bg-background min-h-screen flex flex-col">
             <Navbar />
 
             {/* Header Section */}
@@ -52,7 +53,7 @@ const SearchResults = () => {
                 </div>
             </div>
 
-            <div className="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-6">
+            <div className="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-6 flex-1">
                 {/* Filters Sidebar */}
                 <div className="w-full md:w-1/4">
                     <Filters onFilter={() => { }} />
@@ -85,12 +86,13 @@ const SearchResults = () => {
                         ) : (
                             trips.map(trip => (
                                 <TripCard key={trip._id} trip={trip} />
-
                             ))
                         )}
                     </div>
                 </div>
             </div>
+
+            <Footer />
         </div>
     );
 };
