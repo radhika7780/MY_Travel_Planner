@@ -14,8 +14,7 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 
 // Load environment variables
-dotenv.config();
-
+dotenv.config({ path: './.env' });
 // Connect to Database
 connectDB();
 
